@@ -1,26 +1,25 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { UserCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import { BellIcon } from '@heroicons/react/24/outline'
-import { Card } from '@tremor/react'
+import { Badge, Card } from '@tremor/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useIsOnline } from "react-use-is-online";
 import { useRouter } from 'next/router';
-import { SignalIcon, SignalSlashIcon } from '@heroicons/react/24/solid'
+import { ShoppingBagIcon, SignalIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { useToast } from '@chakra-ui/react'
 import { useLoaded } from '../helpers/funtions'
 import { NavigationItem, Role } from '../helpers/interfaces'
 
 
 const navigation: NavigationItem[] = [
-    { name: 'Menú', href: '/app/dashboard', current: true, roles: ['Employee', 'User'] },
-    { name: 'Gestión de Productos', href: '/app/products', current: false, roles: ['Admin', 'Employee', 'User'] },
-    { name: 'Control de Stock', href: '/app/inventory', current: false, roles: ['Admin', 'Employee'] },
-    // ADMIN ROLE
-    { name: 'Home', href: '/app/admin', current: false, roles: ['Admin'] },
-    { name: 'Usuarios', href: '/app/admin/users', current: false, roles: ['Admin'] },
+    { name: 'Menú', href: '/app/dashboard', current: true, roles: ['Admin', 'Employee', 'User'] },
+    { name: 'Tienda', href: '/app/products', current: false, roles: ['Admin', 'Employee', 'User'] },
+    { name: 'Mis Libros', href: '/app/inventory', current: false, roles: ['Admin', 'Employee'] },
+
+    { name: 'Admin Panel', href: '/app/admin/users', current: false, roles: ['Admin'] },
 ];
 
 function classNames(...classes: any[]) {
@@ -40,7 +39,7 @@ const Navbar: React.FC = () => {
 
     const toast = useToast();
 
-    const userRole: Role = 'User'; // CAMBIAR AL ROL DEL USUARIO LOGUEADO
+    const userRole: Role = 'Admin'; // CAMBIAR AL ROL DEL USUARIO LOGUEADO
     const filteredNavigation = filterMenuByRole(userRole);
 
     const handleSignOut = async () => {
@@ -83,31 +82,27 @@ const Navbar: React.FC = () => {
                                     )}
                                 </Disclosure.Button>
                             </div>
-                            
+
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex flex-shrink-0 items-center h-12">
                                     <Link href="/app/dashboard">
                                         <h5 className="antialiased text-xl font-semibold w-auto">
-                                            SalesX
+                                            BooksX
                                         </h5>
                                     </Link>
                                 </div>
                             </div>
-                            
+
                             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static  sm:inset-auto sm:ml-6 sm:pr-0">
 
                                 <span className="absolute -inset-1.5" />
                                 <span className="sr-only">Ver Notificaciones</span>
-                                {isOnline && loaded ?
-                                    <div className='relative rounded-full bg-white p-1 text-green-800'>
-                                        <SignalIcon className="h-6 w-6" aria-hidden="true" />
 
-                                    </div>
-                                    :
-                                    <div className='relative rounded-full bg-white p-1 text-red-800'>
-                                        <SignalSlashIcon className="h-6 w-6" aria-hidden="true" />
-                                    </div>
-                                }
+                                <div className='flex relative rounded-full px-2 '>
+                                    <ShoppingBagIcon className="h-6 w-6" aria-hidden="true" />
+                                    <Badge>0</Badge>
+                                </div>
+
 
 
 
@@ -183,9 +178,9 @@ const Navbar: React.FC = () => {
                                         >
                                             {item.name}
                                         </Disclosure.Button>
-                                        <div className="my-1"/>
+                                        <div className="my-1" />
                                     </Link>
-                                    
+
                                 ))}
                             </div>
                         </Disclosure.Panel>

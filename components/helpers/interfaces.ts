@@ -5,13 +5,14 @@ export interface NavigationItem {
     roles: Role[];
 }
 
-export interface ProductItem {
-    id: number;
-    name: string;
-    description: string;
-    category: string;
-    price: number;
-    quantity: number;
-}
-
 export type Role = 'Admin' | 'Employee' | 'User' | 'Guest';
+
+
+/* INTERFACES DE LA APP */
+
+export interface Libro {
+    titulo: string;
+    genero: string;
+    autor: string;
+    precio: number;
+}

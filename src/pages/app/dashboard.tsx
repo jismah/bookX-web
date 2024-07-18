@@ -8,41 +8,24 @@ import { useRouter } from "next/router";
 import { userAgent } from "next/server";
 import useSWR from 'swr';
 import { fetcherSWR } from "../../../components/helpers/fetcherSWR";
-import { ProductItem } from "../../../components/helpers/interfaces";
-import { productList } from "../../../components/helpers/fakeData";
+import { libros } from "../../../components/helpers/fakeData";
+
 
 
 
 const Dashboard: NextPage = () => {
 
-    const { data: products, error: errorProducts, isLoading: loadingProducts, mutate: mutateProducts } = useSWR<ProductItem[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/products`, fetcherSWR);
-    
+    // const { data: products, error: errorProducts, isLoading: loadingProducts, mutate: mutateProducts } = useSWR<ProductItem[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/products`, fetcherSWR);
+    const listLibros = libros;
+    const loadingProducts = false;
+    const errorProducts = false;
+
 
     const [userLogged, setUserLogged] = useState("John");
 
     const isLoading = loadingProducts;
-    const isError = errorProducts;
 
 
-
-    if (isError) return (
-        <div className='full-screen-div'>
-            <div className="flex flex-col">
-                <h4>Hubo un Error...</h4>
-                <Card
-                    className="mt-6"
-                    decoration="top"
-                    decorationColor="red">
-                    <pre className="px-4">
-                        <code className="break-words text-xs">
-                            {isError.message || JSON.stringify(isError, null, 2)}
-                        </code>
-                    </pre>
-                </Card>
-            </div>
-
-        </div>
-    )
 
     if (isLoading) return (
         <div className='full-screen-div'>
@@ -72,7 +55,7 @@ const Dashboard: NextPage = () => {
             <div className="md:grid md:grid-cols-4 md:gap-8 px-4 pt-4 sm:grid sm:grid-cols-2 sm:gap-4">
                 <Card className="mx-auto">
                     <p className="text-tremor-default text-tremor-content">Productos Registrados</p>
-                    <p className="text-3xl text-tremor-content-strong font-semibold">{products?.length}</p>
+                    <p className="text-3xl text-tremor-content-strong font-semibold">{listLibros?.length}</p>
                 </Card>
                 <Card className="mx-auto">
                     <p className="text-tremor-default text-tremor-content">KPI #2</p>

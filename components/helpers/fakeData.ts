@@ -59,18 +59,6 @@ export const carrito: CarritoItem[] = [
 ];
 
 export const librosComprados: LibroComprado[] = [
-    {
-        id: 1,
-        libro: libros[0], // "Cien años de soledad"
-        cantidad: 1,
-        fechaCompra: new Date('2023-07-01')
-    },
-    {
-        id: 2,
-        libro: libros[1], // "Don Quijote de la Mancha"
-        cantidad: 2,
-        fechaCompra: new Date('2023-07-10')
-    }
 ];
 
 export const comentarios: Comentario[] = [

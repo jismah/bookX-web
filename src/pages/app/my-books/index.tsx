@@ -94,12 +94,14 @@ const MyBooks: NextPage = () => {
                                             <TableCell>{formatCurrency((book.libro.precio) * (book.cantidad))}</TableCell>
                                             <TableCell>{format(book.fechaCompra, "dd-MM-yyyy")}</TableCell>
                                             <TableCell>
-                                                <Button
-                                                    className="mx-3"
-                                                    icon={EyeIcon}
-                                                >
-                                                    Ver Libro
-                                                </Button>
+                                                <Link href={`/app/tienda/${book.id}`}>
+                                                    <Button
+                                                        className="mx-3"
+                                                        icon={EyeIcon}
+                                                    >
+                                                        Ver Libro
+                                                    </Button>
+                                                </Link>
                                             </TableCell>
                                         </TableRow>
                                     ))

@@ -8,6 +8,7 @@ import { calcularTotalCarrito, carrito, librosComprados } from "../../../../comp
 import { calcularMisLibros, formatCurrency } from "../../../../components/helpers/funtions";
 import { CarritoItem, LibroComprado } from "../../../../components/helpers/interfaces";
 import { format } from 'date-fns';
+import PrivateRoute from "../../../../components/layouts/PrivateRoute";
 
 const MyBooks: NextPage = () => {
 
@@ -32,7 +33,8 @@ const MyBooks: NextPage = () => {
 
 
     return (
-        <>
+        <PrivateRoute allowedRoles={['admin', 'cliente']}>
+
             <div className="px-4 py-3">
                 <div>
                     <h1 className="text-2xl font-bold text-tremor-content-strong">Mis Libros</h1>
@@ -115,7 +117,8 @@ const MyBooks: NextPage = () => {
                     </Table>
                 </Card>
             </div>
-        </>
+
+        </PrivateRoute>
     )
 }
 

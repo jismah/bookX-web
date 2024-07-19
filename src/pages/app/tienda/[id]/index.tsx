@@ -11,6 +11,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { comentarios } from "../../../../../components/helpers/fakeData";
 import { fetcherSWR } from "../../../../../components/helpers/fetcherSWR";
 import { Libro } from "../../../../../components/helpers/interfaces";
+import PrivateRoute from "../../../../../components/layouts/PrivateRoute";
 
 
 const LibroDetails: NextPage = () => {
@@ -34,93 +35,95 @@ const LibroDetails: NextPage = () => {
     )
 
     return (
-        <div className="px-4 py-3">
-            <div className="sm:flex sm:items-center sm:justify-between sm:space-x-10">
-                <div>
-                    <h1 className="text-xl font-bold text-tremor-content-strong">Libro #{id}</h1>
-                    <h1 className="text-4xl font-bold text-tremor-content-strong">{libroData?.titulo}</h1>
-                    <p className="mt-1 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
-                        Vista de Detalles del Libro Seleccionado.
-                    </p>
+        <PrivateRoute allowedRoles={['admin', 'cliente']}>
+            <div className="px-4 py-3">
+                <div className="sm:flex sm:items-center sm:justify-between sm:space-x-10">
+                    <div>
+                        <h1 className="text-xl font-bold text-tremor-content-strong">Libro #{id}</h1>
+                        <h1 className="text-4xl font-bold text-tremor-content-strong">{libroData?.titulo}</h1>
+                        <p className="mt-1 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
+                            Vista de Detalles del Libro Seleccionado.
+                        </p>
+                    </div>
+                    <div>
+                        <Link href={'/app/tienda'} className="me-3">
+                            <button
+                                type="button"
+                                className="mt-4 w-full whitespace-nowrap rounded-tremor-small bg-gray-800 px-4 py-2.5 text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-gray-600 sm:mt-0 sm:w-fit"
+                            >
+                                Volver
+                            </button>
+                        </Link>
+                        <Link href={'/app/tienda'}>
+                            <Button>
+                                Agregar al Carrito
+                            </Button>
+                        </Link>
+                    </div>
+
                 </div>
+
                 <div>
-                    <Link href={'/app/tienda'} className="me-3">
-                        <button
-                            type="button"
-                            className="mt-4 w-full whitespace-nowrap rounded-tremor-small bg-gray-800 px-4 py-2.5 text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-gray-600 sm:mt-0 sm:w-fit"
-                        >
-                            Volver
-                        </button>
-                    </Link>
-                    <Link href={'/app/tienda'}>
-                        <Button>
-                            Agregar al Carrito
-                        </Button>
-                    </Link>
-                </div>
+                    <div className="mt-3">
+                        <dl className="divide-y divide-gray-100">
+                            <div className="ox-2 py-4 sm:grid sm:grid-cols-3">
+                                <dt className="text-md font-bold leading-6 text-gray-900">Genero</dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{libroData?.genero}</dd>
+                            </div>
+                            <div className="ox-2 py-4 sm:grid sm:grid-cols-3">
+                                <dt className="text-md font-bold leading-6 text-gray-900">Autor</dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{libroData?.autor}</dd>
+                            </div>
+                            <div className="ox-2 py-4 sm:grid sm:grid-cols-3">
+                                <dt className="text-md font-bold leading-6 text-gray-900">Precio</dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{formatCurrency(libroData?.precio)}</dd>
+                            </div>
+                            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="text-xl font-bold leading-6 text-gray-900">Reseñas</dt>
+                                <div className="w-full flex flex-col">
+                                    <Textarea placeholder="Agregar comentario..." rows={3} className="w-full"></Textarea>
+                                    <div className="mt-3">
 
-            </div>
+                                        <Button>
+                                            Enviar Mi Reseña
+                                        </Button>
+                                    </div>
+                                    <div className="mt-8 grid grid-cols-1 gap-6">
+                                        {comentarios.map((comentario) => (
+                                            <Card key={comentario.user} className="group">
+                                                <div className="flex items-center space-x-4">
 
-            <div>
-                <div className="mt-3">
-                    <dl className="divide-y divide-gray-100">
-                        <div className="ox-2 py-4 sm:grid sm:grid-cols-3">
-                            <dt className="text-md font-bold leading-6 text-gray-900">Genero</dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{libroData?.genero}</dd>
-                        </div>
-                        <div className="ox-2 py-4 sm:grid sm:grid-cols-3">
-                            <dt className="text-md font-bold leading-6 text-gray-900">Autor</dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{libroData?.autor}</dd>
-                        </div>
-                        <div className="ox-2 py-4 sm:grid sm:grid-cols-3">
-                            <dt className="text-md font-bold leading-6 text-gray-900">Precio</dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{formatCurrency(libroData?.precio)}</dd>
-                        </div>
-                        <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt className="text-xl font-bold leading-6 text-gray-900">Reseñas</dt>
-                            <div className="w-full flex flex-col">
-                                <Textarea placeholder="Agregar comentario..." rows={3} className="w-full"></Textarea>
-                                <div className="mt-3">
+                                                    <div className="truncate">
+                                                        <p className="truncate text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
 
-                                    <Button>
-                                        Enviar Mi Reseña
-                                    </Button>
-                                </div>
-                                <div className="mt-8 grid grid-cols-1 gap-6">
-                                    {comentarios.map((comentario) => (
-                                        <Card key={comentario.user} className="group">
-                                            <div className="flex items-center space-x-4">
-                                                
-                                                <div className="truncate">
-                                                    <p className="truncate text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                                            <span className="absolute inset-0" aria-hidden={true} />
+                                                            {comentario.user}
 
-                                                        <span className="absolute inset-0" aria-hidden={true} />
-                                                        {comentario.user}
-
-                                                    </p>
-                                                    <p className="text-wrap text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-                                                        {comentario.message}
-                                                    </p>
+                                                        </p>
+                                                        <p className="text-wrap text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+                                                            {comentario.message}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <span
-                                                className="pointer-events-none absolute right-4 top-4 text-tremor-content-subtle group-hover:text-tremor-content dark:text-dark-tremor-content-subtle group-hover:dark:text-dark-tremor-content"
-                                                aria-hidden={true}>
-                                                <span className="text-sm">
-                                                    {format(comentario.dateSended, 'dd/MM/yyyy')}
+                                                <span
+                                                    className="pointer-events-none absolute right-4 top-4 text-tremor-content-subtle group-hover:text-tremor-content dark:text-dark-tremor-content-subtle group-hover:dark:text-dark-tremor-content"
+                                                    aria-hidden={true}>
+                                                    <span className="text-sm">
+                                                        {format(comentario.dateSended, 'dd/MM/yyyy')}
+                                                    </span>
                                                 </span>
-                                            </span>
-                                        </Card>
-                                    ))}
+                                            </Card>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
 
-                    </dl>
+                        </dl>
+                    </div>
                 </div>
             </div>
-        </div>
+        </PrivateRoute>
     )
 }
 

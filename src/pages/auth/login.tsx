@@ -5,6 +5,11 @@ import { useIsOnline } from 'react-use-is-online';
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import useSWR from "swr";
+import { fetcherSWR } from "../../../components/helpers/fetcherSWR";
+import { User } from "../../../components/helpers/interfaces";
+import { rolUser } from "../../../components/helpers/funtions";
+import { useAuth } from "../../../context/AuthContext";
 
 const GoogleIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -14,11 +19,14 @@ const GoogleIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) =>
 
 const Login: NextPage = () => {
     const { isOnline, isOffline, error } = useIsOnline();
-    const [user, setUser] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
+    const { setUser } = useAuth();
+
+    const { data: users, error: errorLibros, isLoading: loadingLibros } = useSWR<[User]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/read`, fetcherSWR);
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -79,6 +87,37 @@ const Login: NextPage = () => {
         setLoading(false);
     }
 
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        const user = users?.find(user => user.email === email && user.password === password);
+
+        if (user) {
+            setUser(user);
+            toast({
+                title: `Bienvenido ${user.nombre} ${user.apellido} a BooksX!`,
+                status: 'success',
+                position: 'bottom',
+                duration: 4000,
+            });
+
+            if (user.role === 'admin') {
+                router.push('/app/admin');
+            } else {
+                router.push('/app/dashboard');
+            }
+
+
+        } else {
+
+            toast({
+                title: "Email o contraseña incorrectos.",
+                status: 'warning',
+                position: 'bottom',
+                duration: 4000,
+            });
+        }
+    };
+
     useEffect(() => {
 
     }, []);
@@ -97,22 +136,22 @@ const Login: NextPage = () => {
                         <img src="https://flowbite.com/docs/images/logo.svg" className="h-16" alt="Flowbite Logo" />
                     </div>
 
-                    <form className="mt-6" onSubmit={handleSignIn}>
+                    <form className="mt-6" onSubmit={handleLogin}>
                         <div className="col-span-full">
                             <label
                                 htmlFor="user"
                                 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
                             >
-                                Usuario
+                                Email
                             </label>
                             <TextInput
                                 type="text"
-                                id="user"
-                                name="user"
-                                value={user}
-                                onChange={(e) => setUser(e.target.value)}
-                                autoComplete="username"
-                                placeholder="Usuario"
+                                id="email"
+                                name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                autoComplete="email"
+                                placeholder="Email"
                                 className="mt-2 py-1"
                                 required
                             />

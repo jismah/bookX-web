@@ -2,10 +2,10 @@ export interface NavigationItem {
     name: string;
     href: string;
     current: boolean;
-    roles: Role[];
+    roles: string[];
 }
 
-export type Role = 'Admin' | 'Employee' | 'Client' | 'Guest';
+export type Role = 'admin' | 'cliente' | 'guest';
 
 
 /* INTERFACES DE LA APP */
@@ -36,3 +36,22 @@ export interface Comentario {
     message: string;
     dateSended: Date;
 }
+
+export interface Authority {
+    authority: string;
+  }
+  
+  export interface User {
+    id: number;
+    nombre: string;
+    apellido: string;
+    email: string;
+    password: string;
+    role: string;
+    enabled: boolean;
+    username: string;
+    authorities: Authority[];
+    accountNonExpired: boolean;
+    credentialsNonExpired: boolean;
+    accountNonLocked: boolean;
+  }

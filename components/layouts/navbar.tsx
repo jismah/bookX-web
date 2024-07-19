@@ -13,45 +13,47 @@ import { useToast } from '@chakra-ui/react'
 import { carritoLength, useLoaded } from '../helpers/funtions'
 import { NavigationItem, Role } from '../helpers/interfaces'
 import { carrito } from '../helpers/fakeData'
+import { useAuth } from '../../context/AuthContext'
 
 
 const navigation: NavigationItem[] = [
-    { name: 'Menú', href: '/app/dashboard', current: true, roles: ['Admin', 'Employee', 'Client'] },
-    { name: 'Tienda', href: '/app/tienda', current: false, roles: ['Admin', 'Employee', 'Client'] },
-    { name: 'Mis Libros', href: '/app/my-books', current: false, roles: ['Admin', 'Employee'] },
+    { name: 'Menú', href: '/app/dashboard', current: true, roles: ['admin', 'cliente', 'guest'] },
+    { name: 'Tienda', href: '/app/tienda', current: false, roles: ['admin', 'cliente', 'guest'] },
+    { name: 'Mis Libros', href: '/app/my-books', current: false, roles: ['admin', 'cliente'] },
 
-    { name: 'Admin Panel', href: '/app/admin/dashboard', current: false, roles: ['Admin'] },
+    { name: 'Admin Panel', href: '/app/admin', current: false, roles: ['admin'] },
 ];
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const filterMenuByRole = (role: Role): NavigationItem[] => {
+const filterMenuByRole = (role: string): NavigationItem[] => {
     return navigation.filter(item => item.roles.includes(role));
 };
 
 const Navbar: React.FC = () => {
 
     const router = useRouter();
+    const { user, logout } = useAuth();
 
     const { isOnline, isOffline, error } = useIsOnline();
     const loaded = useLoaded();
 
     const toast = useToast();
 
-
-    const userRole: Role = 'Admin'; // CAMBIAR AL ROL DEL USUARIO LOGUEADO
-    const filteredNavigation = filterMenuByRole(userRole);
+    // CAMBIAR AL ROL DEL USUARIO LOGUEADO
+    const filteredNavigation = filterMenuByRole(user?.role || "");
 
     const handleSignOut = async () => {
-        toast({
-            title: 'Cerrando Sesion...',
-            status: 'loading',
-            position: 'bottom',
-            duration: 2000,
-        })
         try {
+            logout();
+            toast({
+                title: 'Cerrando Sesion...',
+                status: 'loading',
+                position: 'bottom',
+                duration: 2000,
+            });
             router.push('/auth/login');
         } catch (error) {
             console.log(error);
@@ -62,8 +64,6 @@ const Navbar: React.FC = () => {
                 duration: 4000,
             })
         }
-
-
     }
 
     return (

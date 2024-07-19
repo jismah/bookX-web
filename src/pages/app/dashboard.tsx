@@ -10,6 +10,8 @@ import useSWR from 'swr';
 import { fetcherSWR } from "../../../components/helpers/fetcherSWR";
 import { libros, librosComprados } from "../../../components/helpers/fakeData";
 import { Libro } from "../../../components/helpers/interfaces";
+import { useAuth } from "../../../context/AuthContext";
+import PrivateRoute from "../../../components/layouts/PrivateRoute";
 
 
 
@@ -17,10 +19,9 @@ import { Libro } from "../../../components/helpers/interfaces";
 const Dashboard: NextPage = () => {
 
     const { data: libros, error: errorLibros, isLoading: loadingLibros, mutate: mutateLibros } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/books`, fetcherSWR);
-    const listLibros = libros;
 
 
-    const [userLogged, setUserLogged] = useState("John");
+    const { user } = useAuth();
 
     const isLoading = loadingLibros;
 
@@ -40,10 +41,10 @@ const Dashboard: NextPage = () => {
 
 
     return (
-        <>
+        <PrivateRoute allowedRoles={['admin', 'cliente']}>
             <div className="px-4 py-3">
                 <div>
-                    <h1 className="text-2xl font-bold text-tremor-content-strong">Saludos {userLogged}!</h1>
+                    <h1 className="text-2xl font-bold text-tremor-content-strong">Saludos {user?.nombre} {user?.apellido}!</h1>
                     <p className="mt-1 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
                         A continuación, te mostramos algunas metricas y accesos interesantes!.
                     </p>
@@ -81,10 +82,10 @@ const Dashboard: NextPage = () => {
                             </div>
                         </Card>
                     </Link>
-                    
+
                 </div>
             </div>
-        </>
+        </PrivateRoute>
     )
 }
 

@@ -7,22 +7,17 @@ import { useState } from "react";
 import { calcularTotalCarrito, carrito } from "../../../../components/helpers/fakeData";
 import { formatCurrency } from "../../../../components/helpers/funtions";
 import { CarritoItem } from "../../../../components/helpers/interfaces";
+import PrivateRoute from "../../../../components/layouts/PrivateRoute";
 
 
 
 
 const MiCarrito: NextPage = () => {
 
-
     const loadingProducts = false;
     const errorProducts = false;
 
-
-    const [userLogged, setUserLogged] = useState("John");
-
     const isLoading = loadingProducts;
-
-
 
     if (isLoading) return (
         <div className='full-screen-div'>
@@ -38,7 +33,7 @@ const MiCarrito: NextPage = () => {
 
 
     return (
-        <>
+        <PrivateRoute allowedRoles={['admin', 'cliente']}>
             <div className="px-4 py-3">
                 <div>
                     <h1 className="text-2xl font-bold text-tremor-content-strong">Mi Carrito</h1>
@@ -141,7 +136,7 @@ const MiCarrito: NextPage = () => {
 
                 </div>
             </div>
-        </>
+        </PrivateRoute>
     )
 }
 

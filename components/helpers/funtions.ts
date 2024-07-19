@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { carrito, libros, librosComprados } from "./fakeData";
+import { LibroComprado } from "./interfaces";
 
 export function formatCurrency(amount: number | null): string {
     // Verifica si amount no es undefined antes de formatearlo
@@ -33,3 +35,39 @@ export const useLoaded = () => {
     useEffect(() => setLoaded(true), []);
     return loaded;
 };
+
+export function agregarAlCarrito(libroId: number, cantidad: number): void {
+    const libro = libros.find(l => l.id === libroId);
+    if (!libro) {
+        console.log("Libro no encontrado");
+        return;
+    }
+
+    const itemCarrito = carrito.find(item => item.libro.id === libroId);
+    if (itemCarrito) {
+        itemCarrito.cantidad += cantidad;
+    } else {
+        carrito.push({
+            id: carrito.length + 1, // Generar un nuevo ID para el elemento del carrito
+            libro: libro,
+            cantidad: cantidad
+        });
+    }
+
+    actualizarCarritoLength();
+};
+
+export let carritoLength = carrito.length;
+export let rolUser = '';
+
+// Función para actualizar la longitud del carrito
+export function actualizarCarritoLength(): void {
+    carritoLength = carrito.length;
+}
+
+// Función para calcular el total de libros comprados
+export function calcularMisLibros(libros: LibroComprado[]): number {
+    return librosComprados.reduce((total, item) => {
+        return total + (item.libro.precio * item.cantidad);
+    }, 0);
+}

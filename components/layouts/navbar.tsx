@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Bars3Icon } from '@heroicons/react/24/outline'
@@ -10,16 +10,17 @@ import { useIsOnline } from "react-use-is-online";
 import { useRouter } from 'next/router';
 import { ShoppingBagIcon, SignalIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { useToast } from '@chakra-ui/react'
-import { useLoaded } from '../helpers/funtions'
+import { carritoLength, useLoaded } from '../helpers/funtions'
 import { NavigationItem, Role } from '../helpers/interfaces'
+import { carrito } from '../helpers/fakeData'
 
 
 const navigation: NavigationItem[] = [
-    { name: 'Menú', href: '/app/dashboard', current: true, roles: ['Admin', 'Employee', 'User'] },
-    { name: 'Tienda', href: '/app/products', current: false, roles: ['Admin', 'Employee', 'User'] },
-    { name: 'Mis Libros', href: '/app/inventory', current: false, roles: ['Admin', 'Employee'] },
+    { name: 'Menú', href: '/app/dashboard', current: true, roles: ['Admin', 'Employee', 'Client'] },
+    { name: 'Tienda', href: '/app/tienda', current: false, roles: ['Admin', 'Employee', 'Client'] },
+    { name: 'Mis Libros', href: '/app/my-books', current: false, roles: ['Admin', 'Employee'] },
 
-    { name: 'Admin Panel', href: '/app/admin/users', current: false, roles: ['Admin'] },
+    { name: 'Admin Panel', href: '/app/admin/dashboard', current: false, roles: ['Admin'] },
 ];
 
 function classNames(...classes: any[]) {
@@ -38,6 +39,7 @@ const Navbar: React.FC = () => {
     const loaded = useLoaded();
 
     const toast = useToast();
+
 
     const userRole: Role = 'Admin'; // CAMBIAR AL ROL DEL USUARIO LOGUEADO
     const filteredNavigation = filterMenuByRole(userRole);
@@ -98,14 +100,12 @@ const Navbar: React.FC = () => {
                                 <span className="absolute -inset-1.5" />
                                 <span className="sr-only">Ver Notificaciones</span>
 
-                                <div className='flex relative rounded-full px-2 '>
-                                    <ShoppingBagIcon className="h-6 w-6" aria-hidden="true" />
-                                    <Badge>0</Badge>
-                                </div>
-
-
-
-
+                                <Link href="/app/carrito">
+                                    <div className='flex relative rounded-full px-2 '>
+                                        <ShoppingBagIcon className="h-6 w-6" aria-hidden="true" />
+                                        <Badge>{carrito.length}</Badge>
+                                    </div>
+                                </Link>
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="relative pl-2">
                                     <div>
@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
                                                     {({ active }) => (
                                                         <a
                                                             href="#"
-                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                            className={classNames(active ? '' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                         >
                                                             Configuración
                                                         </a>
@@ -142,7 +142,7 @@ const Navbar: React.FC = () => {
                                                     {({ active }) => (
                                                         <button
                                                             onClick={() => handleSignOut()}
-                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-red-700')}
+                                                            className={classNames(active ? '' : '', 'block px-4 py-2 text-sm text-red-700')}
                                                         >
                                                             Cerrar Sesión
                                                         </button>

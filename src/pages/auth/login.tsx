@@ -4,6 +4,7 @@ import { JSX, SVGProps, useEffect, useState } from "react";
 import { useIsOnline } from 'react-use-is-online';
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const GoogleIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -145,6 +146,17 @@ const Login: NextPage = () => {
                         >
                             Iniciar Sesión
                         </Button>
+                        <Link href={"/auth/register"}>
+                            <Button
+                                variant="light"
+                                className="mt-4 w-full py-2"
+                                loading={loading}
+                                loadingText={'Ingresando...'}
+                            >
+                                Registrarme
+                            </Button>
+                        </Link>
+
                     </form>
                     <p className="mt-4 text-tremor-label text-tremor-content dark:text-dark-tremor-content">
                         Al iniciar sesión, aceptas nuestros{' '}

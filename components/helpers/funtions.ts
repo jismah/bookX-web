@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { carrito, libros, librosComprados } from "./fakeData";
-import { LibroComprado } from "./interfaces";
+import { CarritoItem, LibroComprado } from "./interfaces";
 
 export function formatCurrency(amount: number | null): string {
     // Verifica si amount no es undefined antes de formatearlo
@@ -15,13 +15,13 @@ export function formatFrequency(frequency: string | null) {
     if (frequency !== undefined && frequency !== null) {
         if (frequency === "MONTHLY") {
             return "Mensual";
-        } else if (frequency === "WEEKLY"){
+        } else if (frequency === "WEEKLY") {
             return "Semanal";
-        } else if (frequency === "BIWEEKLY"){
+        } else if (frequency === "BIWEEKLY") {
             return "Quincenal";
-        } else if (frequency === "UNIQUE"){
+        } else if (frequency === "UNIQUE") {
             return "Único";
-        } else if (frequency === "YEARLY"){
+        } else if (frequency === "YEARLY") {
             return "Anual";
         }
     } else {
@@ -71,3 +71,28 @@ export function calcularMisLibros(libros: LibroComprado[]): number {
         return total + (item.libro.precio * item.cantidad);
     }, 0);
 }
+
+export const calcularTotalVendido = (librosComprados: LibroComprado[]): number => {
+    let totalVendido = 0;
+    librosComprados.forEach((compra) => {
+        totalVendido += compra.libro.precio * compra.cantidad;
+    });
+    return totalVendido;
+};
+
+export const calcularTotalLibrosVendidos = (librosComprados: LibroComprado[]): number => {
+    let totalLibrosVendidos = 0;
+    librosComprados.forEach((compra) => {
+        totalLibrosVendidos += compra.cantidad;
+    });
+    return totalLibrosVendidos;
+};
+
+
+const calcularTotalCarrito = (carrito: CarritoItem[]): number => {
+    let totalCarrito = 0;
+    carrito.forEach((item) => {
+        totalCarrito += item.libro.precio * item.cantidad;
+    });
+    return totalCarrito;
+};

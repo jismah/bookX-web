@@ -63,16 +63,6 @@ export const librosComprados: LibroComprado[] = [
 
 export const comentarios: Comentario[] = [
     {
-        user: "Juan Pérez",
-        message: "Una obra maestra. La narrativa es increíble y los personajes son inolvidables.",
-        dateSended: new Date('2023-01-15')
-    },
-    {
-        user: "María Gómez",
-        message: "Me encantó de principio a fin. Es un libro que todos deberían leer.",
-        dateSended: new Date('2023-02-10')
-    },
-    {
         user: "Carlos López",
         message: "La trama es un poco lenta al principio, pero luego se pone muy interesante.",
         dateSended: new Date('2023-03-05')

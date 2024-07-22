@@ -26,6 +26,7 @@ export interface CarritoItem {
 
 export interface LibroComprado {
     id: number;
+    idComprador: number;
     libro: Libro;
     cantidad: number;
     fechaCompra: Date;

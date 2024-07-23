@@ -22,7 +22,7 @@ const Register: NextPage = () => {
         setLoading(true);
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/create`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/register`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const Register: NextPage = () => {
                     apellido: lastname,
                     email: email,
                     password: password,
-                    role: "cliente"
+                    role: "user"
                 })
             });
 
@@ -41,15 +41,15 @@ const Register: NextPage = () => {
 
             if (res.status === 200) {
                 toast({
-                    title: "Bienvenido/a a SalesX",
+                    title: "Te haz registrado correctamente",
                     status: 'success',
                     position: 'bottom',
                     duration: 4000,
                 });
-                router.push('/app/dashboard');
+                router.push('/auth/login');
             } else {
                 toast({
-                    title: 'Error de inicio de sesión',
+                    title: 'Error de registro...',
                     description: json.message || res.statusText,
                     status: 'error',
                     position: 'bottom',
@@ -176,8 +176,6 @@ const Register: NextPage = () => {
                             <Button
                                 variant="light"
                                 className="mt-4 w-full py-2"
-                                loading={loading}
-                                loadingText={'Ingresando...'}
                             >
                                 Iniciar Sesión
                             </Button>

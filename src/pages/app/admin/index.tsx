@@ -34,13 +34,15 @@ const AdminPage = () => {
     selectedBooks.includes(book.titulo) || selectedBooks.length === 0;
 
   const isUserSelected = (user: User) =>
-    selectedUser.includes(user.nombre) || selectedUser.length === 0;
+    selectedUser.includes(user.name) || selectedUser.length === 0;
 
-  const { data: libros, error: errorLibros, isLoading: loadingLibros, mutate: mutateLibros } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/books`, fetcherSWR);
+  const { data: libros, error: errorLibros, isLoading: loadingLibros, mutate: mutateLibros } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/catalogo/books`, fetcherSWR);
   const { data: users, error: errorUsuarios, isLoading: loadingUsuarios } = useSWR<[User]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/read`, fetcherSWR);
   const historialVentas = librosComprados;
 
   const isLoading = loadingbooks;
+
+
 
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,6 +52,9 @@ const AdminPage = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentBooks =
     libros?.slice(indexOfFirstItem, indexOfLastItem) || [];
+
+  const currentUsers =
+    users?.slice(indexOfFirstItem, indexOfLastItem) || [];
 
   var totalPages = 0;
 
@@ -335,8 +340,8 @@ const AdminPage = () => {
                     onValueChange={setSelectedUser}
                   >
                     {users?.map((user: User) => (
-                      <MultiSelectItem key={user.id} value={user.nombre}>
-                        {user.nombre} {user.apellido}
+                      <MultiSelectItem key={user.id} value={user.name}>
+                        {user.name}
                       </MultiSelectItem>
                     ))}
                   </MultiSelect>
@@ -361,7 +366,7 @@ const AdminPage = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {users?.length > 0 ? (
+                      {currentUsers?.length > 0 ? (
                         users
                           ?.filter((user: User) => isUserSelected(user))
                           .map((user: User) => (
@@ -369,7 +374,7 @@ const AdminPage = () => {
                               <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                 #{user.id}
                               </TableCell>
-                              <TableCell>{user.nombre} {user.apellido}</TableCell>
+                              <TableCell>{user.name} </TableCell>
                               <TableCell>{user.email}</TableCell>
                               <TableCell>
                                 <Badge>{user.role}</Badge>

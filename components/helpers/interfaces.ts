@@ -44,15 +44,7 @@ export interface Authority {
   
   export interface User {
     id: number;
-    nombre: string;
-    apellido: string;
+    name: string;
     email: string;
-    password: string;
     role: string;
-    enabled: boolean;
-    username: string;
-    authorities: Authority[];
-    accountNonExpired: boolean;
-    credentialsNonExpired: boolean;
-    accountNonLocked: boolean;
   }

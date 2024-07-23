@@ -40,7 +40,7 @@ const TiendaIndex: NextPage = () => {
     const isBookSelected = (book: Libro) =>
         selectedBooks.includes(book.titulo) || selectedBooks.length === 0;
 
-    const { data: libros, error: errorLibros, isLoading: loadingLibros, mutate: mutateLibros } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/books`, fetcherSWR);
+    const { data: libros, error: errorLibros, isLoading: loadingLibros, mutate: mutateLibros } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/catalogo/books`, fetcherSWR);
 
     const isLoading = loadingbooks;
 
@@ -63,8 +63,8 @@ const TiendaIndex: NextPage = () => {
         if (itemCarrito) {
             itemCarrito.cantidad += cantidad;
             toast({
-                title: "Libro ya en el Carrito!",
-                description: "Se ha agregado 1 mas a la cantidad",
+                title: "Libro ya está en el Carrito!",
+                description: "Se ha agregado esta cantidad a la total",
                 status: "info",
                 position: "bottom",
                 duration: 4000,

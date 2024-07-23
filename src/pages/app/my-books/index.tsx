@@ -108,7 +108,7 @@ const MyBooks: NextPage = () => {
                             ) : (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={4}
+                                        colSpan={6}
                                         className="text-center text-tremor-content-muted dark:text-dark-tremor-content-muted"
                                     >
                                         No hay Libros Registrados

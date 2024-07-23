@@ -18,7 +18,7 @@ const LibroDetails: NextPage = () => {
     const router = useRouter();
     const { id } = router.query;
 
-    const { data: libroData, error: errorLibro, isLoading: loadingLibro, mutate: mutateLibro } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/books/${id}`, fetcherSWR);
+    const { data: libroData, error: errorLibro, isLoading: loadingLibro, mutate: mutateLibro } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/catalogo/books/${id}`, fetcherSWR);
     const isLoading = loadingLibro;
 
 

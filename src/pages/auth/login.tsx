@@ -10,6 +10,7 @@ import { fetcherSWR } from "../../../components/helpers/fetcherSWR";
 import { User } from "../../../components/helpers/interfaces";
 import { rolUser } from "../../../components/helpers/funtions";
 import { useAuth } from "../../../context/AuthContext";
+import axios from "axios";
 
 const GoogleIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -26,97 +27,76 @@ const Login: NextPage = () => {
     const router = useRouter();
     const { setUser } = useAuth();
 
-    const { data: users, error: errorLibros, isLoading: loadingLibros } = useSWR<[User]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/read`, fetcherSWR);
+    const { data: users, error: errorLibros, isLoading: loadingUser, mutate: updateUser } = useSWR<[User]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/read`, fetcherSWR);
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // try {
-        //     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/users/login`, {
-        //         method: 'POST',
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         credentials: 'include', // Incluir cookies de sesión
-        //         body: JSON.stringify({
-        //             username: user,
-        //             password: password
-        //         })
-        //     });
-
-        //     const json = await res.json();
-        //     console.log(json);
-
-        //     if (res.status === 200) {
-        //         toast({
-        //             title: "Bienvenido/a a SalesX",
-        //             status: 'success',
-        //             position: 'bottom',
-        //             duration: 4000,
-        //         });
-        //         router.push('/app/dashboard');
-        //     } else {
-        //         toast({
-        //             title: 'Error de inicio de sesión',
-        //             description: json.message || res.statusText,
-        //             status: 'error',
-        //             position: 'bottom',
-        //             duration: 4000,
-        //         });
-        //     }
-        // } catch (error) {
-        //     console.error(error);
-        //     toast({
-        //         title: 'Hubo un error!',
-        //         description: "Inténtalo más tarde...",
-        //         status: 'error',
-        //         position: 'bottom',
-        //         duration: 4000,
-        //     });
-        // }
-
-        router.push('/app/dashboard');
-        toast({
-            title: "Bienvenido/a a BooksX",
-            status: 'success',
-            position: 'bottom',
-            duration: 4000,
-        });
-
-        setLoading(false);
-    }
-
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-        const user = users?.find(user => user.email === email && user.password === password);
-
-        if (user) {
-            setUser(user);
-            toast({
-                title: `Bienvenido ${user.nombre} ${user.apellido} a BooksX!`,
-                status: 'success',
-                position: 'bottom',
-                duration: 4000,
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/authenticate`, {
+                email,
+                password,
             });
 
-            if (user.role === 'admin') {
-                router.push('/app/admin');
+            if (response.data) {
+                const token = response.data;
+                console.log(response.data);
+                // Guardar el token en localStorage
+                localStorage.setItem('token', token);
+
+                const user = users?.find(user => user.email === email);
+                console.log(user);
+
+                if (user) {
+                    setUser(user);
+                    toast({
+                        title: `Bienvenido ${user.name} a BooksX!`,
+                        status: 'success',
+                        position: 'bottom',
+                        duration: 4000,
+                    });
+
+                    if (user.role === 'admin') {
+                        router.push('/app/admin');
+                    } else {
+                        router.push('/app/dashboard');
+                    }
+
+
+                } else {
+
+                    toast({
+                        title: "No se encontro el usuario...",
+                        status: 'warning',
+                        position: 'bottom',
+                        duration: 4000,
+                    });
+                }
             } else {
-                router.push('/app/dashboard');
+
+                toast({
+                    title: "Email o contraseña incorrectos.",
+                    status: 'warning',
+                    position: 'bottom',
+                    duration: 4000,
+                });
             }
 
-
-        } else {
-
+        } catch (error) {
+            console.error(error);
             toast({
-                title: "Email o contraseña incorrectos.",
-                status: 'warning',
+                title: 'Hubo un error!',
+                description: "Inténtalo más tarde...",
+                status: 'error',
                 position: 'bottom',
                 duration: 4000,
             });
         }
-    };
+
+        setLoading(false);
+    }
+
 
     useEffect(() => {
 
@@ -136,7 +116,7 @@ const Login: NextPage = () => {
                         <img src="https://flowbite.com/docs/images/logo.svg" className="h-16" alt="Flowbite Logo" />
                     </div>
 
-                    <form className="mt-6" onSubmit={handleLogin}>
+                    <form className="mt-6" onSubmit={handleSignIn}>
                         <div className="col-span-full">
                             <label
                                 htmlFor="user"
@@ -189,8 +169,6 @@ const Login: NextPage = () => {
                             <Button
                                 variant="light"
                                 className="mt-4 w-full py-2"
-                                loading={loading}
-                                loadingText={'Ingresando...'}
                             >
                                 Registrarme
                             </Button>

@@ -96,3 +96,17 @@ const calcularTotalCarrito = (carrito: CarritoItem[]): number => {
     });
     return totalCarrito;
 };
+
+export const transferirCarritoALibrosComprados = (idComprador: number) => {
+    const fechaCompra = new Date();
+    carrito.forEach(item => {
+        librosComprados.push({
+            id: item.id,
+            idComprador: idComprador,
+            libro: item.libro,
+            cantidad: item.cantidad,
+            fechaCompra: fechaCompra
+        });
+    });
+    carrito.length = 0; // Limpiar el carrito
+};

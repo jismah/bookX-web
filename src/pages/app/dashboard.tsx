@@ -18,7 +18,7 @@ import PrivateRoute from "../../../components/layouts/PrivateRoute";
 
 const Dashboard: NextPage = () => {
 
-    const { data: libros, error: errorLibros, isLoading: loadingLibros, mutate: mutateLibros } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/books`, fetcherSWR);
+    const { data: libros, error: errorLibros, isLoading: loadingLibros, mutate: mutateLibros } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/catalogo/books`, fetcherSWR);
 
 
     const { user } = useAuth();
@@ -44,7 +44,7 @@ const Dashboard: NextPage = () => {
         <PrivateRoute allowedRoles={['admin', 'cliente']}>
             <div className="px-4 py-3">
                 <div>
-                    <h1 className="text-2xl font-bold text-tremor-content-strong">Saludos {user?.nombre} {user?.apellido}!</h1>
+                    <h1 className="text-2xl font-bold text-tremor-content-strong">Saludos {user?.name}!</h1>
                     <p className="mt-1 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
                         A continuación, te mostramos algunas metricas y accesos interesantes!.
                     </p>

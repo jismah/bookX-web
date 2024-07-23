@@ -18,7 +18,7 @@ const LibroDetails: NextPage = () => {
     const router = useRouter();
     const { id } = router.query;
 
-    const { data: libroData, error: errorLibro, isLoading: loadingLibro, mutate: mutateLibro } = useSWR<Libro[]>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/catalogo/books/${id}`, fetcherSWR);
+    const { data: libroData, error: errorLibro, isLoading: loadingLibro, mutate: mutateLibro } = useSWR<Libro>(`${process.env.NEXT_PUBLIC_SERVER_URL}/catalogo/catalogo/books/${id}`, fetcherSWR);
     const isLoading = loadingLibro;
 
 
@@ -76,7 +76,7 @@ const LibroDetails: NextPage = () => {
                             </div>
                             <div className="ox-2 py-4 sm:grid sm:grid-cols-3">
                                 <dt className="text-md font-bold leading-6 text-gray-900">Precio</dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{formatCurrency(libroData?.precio)}</dd>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{formatCurrency(libroData?.precio || 0)}</dd>
                             </div>
                             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="text-xl font-bold leading-6 text-gray-900">Reseñas</dt>
